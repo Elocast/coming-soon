@@ -1,4 +1,5 @@
 import Ship from './Ship'
+import Laser from './Laser'
 
 function Game(canvas) {
   if (!canvas.getContext) {
@@ -15,6 +16,7 @@ function Game(canvas) {
 
   this.paused = false
   this.keys = []
+  this.lasers = []
 
   this.loops = 0
   this.nextGameTick = (new Date()).getTime()
@@ -52,6 +54,9 @@ Game.prototype.start = function() {
 }
 
 Game.prototype.update = function() {
+  this.lasers.forEach(l => l.moveY())
+  this.lasers = this.lasers.filter(l => !(l.coords.y === 0))
+
   if (this.keys[37]) {
     this.ship.moveX(true)
   }
@@ -59,11 +64,31 @@ Game.prototype.update = function() {
   if (this.keys[39]) {
     this.ship.moveX(false)
   }
+
+  if (this.keys[88]) {
+    if (this.lasers.length < 1 ||
+      (new Date()).getTime() - this.lasers.slice().pop().createdAt >= 200
+    ) {
+      this.lasers.push(new Laser({
+        coords: {
+          ...this.ship.coords,
+          x: this.ship.coords.x + this.ship.width / 2
+        },
+        ctx: this.ctx,
+        playboard: {
+          height: this.height,
+          width: this.width
+        },
+        moveRatio: 18
+      }))
+    }
+  }
 }
 
 Game.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.width, this.height)
   this.ship.draw()
+  this.lasers.forEach(l => l.draw())
 }
 
 export default Game
