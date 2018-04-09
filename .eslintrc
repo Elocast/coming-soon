@@ -17,7 +17,7 @@
     "it": true,
     "chai": true,
     "expect": true,
-    "webkitRequestAnimationFrame": true,
+    "requestAnimationFrame": true,
     "mozRequestAnimationFrame": true
   }
 }

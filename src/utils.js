@@ -1,13 +1,19 @@
 (function() {
-  var onEveryFrame
-  if (window.webkitRequestAnimationFrame) {
+  let onEveryFrame
+  if (window.requestAnimationFrame) {
     onEveryFrame = function(cb) {
-      var _cb = function() { cb(); webkitRequestAnimationFrame(_cb) }
+      const _cb = function() {
+        cb()
+        requestAnimationFrame(_cb)
+      }
       _cb()
     }
   } else if (window.mozRequestAnimationFrame) {
     onEveryFrame = function(cb) {
-      var _cb = function() { cb(); mozRequestAnimationFrame(_cb) }
+      const _cb = function() {
+        cb()
+        mozRequestAnimationFrame(_cb)
+      }
       _cb()
     }
   } else {
