@@ -1,0 +1,21 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "prettier",
+    "standard"
+  ],
+  "rules": {
+    "space-before-function-paren": ["error", "never"],
+    "no-duplicate-case": 1,
+    "no-fallthrough": 0,
+    "prefer-promise-reject-errors": 0
+  },
+  "globals": {
+    "before": true,
+    "after": true,
+    "describe": true,
+    "it": true,
+    "chai": true,
+    "expect": true
+  }
+}
