@@ -59,10 +59,10 @@ Game.prototype.start = function() {
 Game.prototype.update = function() {
   if (!this.ship.isProtected()) {
     this.comets.forEach(c => {
-      if (this.ship.coords.x < c.coords.x + (c.size.width) &&
-        this.ship.coords.x + (this.ship.width) > c.coords.x - (c.size.width) &&
-        this.ship.coords.y < c.coords.y + (c.size.height) &&
-        this.ship.coords.y + (this.ship.width) > c.coords.y + (c.size.height)
+      if (this.ship.coords.x - (this.ship.width / 2) < c.coords.x + (c.size.width / 2) &&
+        this.ship.coords.x + (this.ship.width / 2) > c.coords.x - (c.size.width / 2) &&
+        this.ship.coords.y - (this.ship.width / 2) < c.coords.y + (c.size.height / 2) &&
+        this.ship.coords.y + (this.ship.width / 2) > c.coords.y + (c.size.height / 2)
       ) {
         this.ship.collide()
       }
