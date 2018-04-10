@@ -1,13 +1,39 @@
+const COMET_TYPE = [
+  {
+    height: 105,
+    width: 83,
+    moveRatio: 10,
+    src: '/sprites/comet1.svg'
+  },
+  {
+    height: 59,
+    width: 59,
+    moveRatio: 4,
+    src: '/sprites/comet2.svg'
+  },
+  {
+    height: 70,
+    width: 70,
+    moveRatio: 8,
+    src: '/sprites/comet3.svg'
+  }
+]
+
 function Comet(config) {
+  this.type = COMET_TYPE[config.type] ? config.type : Math.floor((Math.random() * 3))
+
   this.coords = config.coords
   this.playboard = config.playboard
   this.ctx = config.ctx
 
-  this.moveRatio = 8
+  this.moveRatio = COMET_TYPE[this.type].moveRatio
   this.size = {
-    height: 90,
-    width: 90
+    height: COMET_TYPE[this.type].height,
+    width: COMET_TYPE[this.type].width
   }
+
+  this.image = new Image()
+  this.image.src = COMET_TYPE[this.type].src
 }
 
 Comet.prototype.moveY = function() {
@@ -26,10 +52,13 @@ Comet.prototype.update = function(config) {
 }
 
 Comet.prototype.draw = function() {
-  this.ctx.fillStyle = '#000'
-  this.ctx.fillRect(this.coords.x - this.size.width / 2, this.coords.y - this.size.height / 2, this.size.width, this.size.height)
-  this.ctx.fillStyle = '#fff'
-  this.ctx.fillRect(this.coords.x, this.coords.y, this.size.width / 2, 1)
+  this.ctx.drawImage(
+    this.image,
+    this.coords.x - this.size.width / 2,
+    this.coords.y - this.size.height / 2,
+    this.size.width,
+    this.size.height
+  )
 }
 
 export default Comet
