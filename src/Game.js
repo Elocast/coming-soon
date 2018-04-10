@@ -11,8 +11,8 @@ function Game(canvas) {
   this.canvas.tabIndex = 1000
   this.canvas.focus()
 
-  this.height = this.canvas.height = 540
-  this.width = this.canvas.width = 500
+  this.height = this.canvas.height = 547
+  this.width = this.canvas.width = 572
 
   this.ctx = canvas.getContext('2d')
 
@@ -27,6 +27,9 @@ function Game(canvas) {
   this.fps = 60
   this.maxFrameSkip = 10
   this.skipTicks = 1000 / this.fps
+
+  this.bgImage = new Image()
+  this.bgImage.src = '/sprites/bg.svg'
 
   this.canvas.addEventListener('keyup', this.keyUp.bind(this))
   this.canvas.addEventListener('keydown', this.keyDown.bind(this))
@@ -157,6 +160,7 @@ Game.prototype.update = function() {
 
 Game.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.width, this.height)
+  this.ctx.drawImage(this.bgImage, 0, 0)
   this.lasers.forEach(l => l.draw())
   this.comets.forEach(c => c.draw())
   this.ship.draw()
