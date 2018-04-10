@@ -1,11 +1,14 @@
 function Ship(config) {
-  this.width = config.width
+  this.size = config.size
   this.coords = config.coords
   this.playboard = config.playboard
   this.ctx = config.ctx
   this.moveRatio = 8
   this.health = 3
   this.protectUntil = (new Date()).getTime()
+
+  this.image = new Image()
+  this.image.src = '/sprites/ship.svg'
 }
 
 Ship.prototype.collide = function() {
@@ -21,12 +24,12 @@ Ship.prototype.isProtected = function() {
 
 Ship.prototype.moveX = function(left) {
   let pos = this.coords.x + (left ? -this.moveRatio : this.moveRatio)
-  if (pos < this.width / 2) {
-    pos = this.width / 2
+  if (pos < this.size.width / 2) {
+    pos = this.size.width / 2
   }
 
-  if (pos + this.width / 2 >= this.playboard.width) {
-    pos = this.playboard.width - this.width / 2
+  if (pos + this.size.width / 2 >= this.playboard.width) {
+    pos = this.playboard.width - this.size.width / 2
   }
 
   this.coords = {
@@ -36,15 +39,20 @@ Ship.prototype.moveX = function(left) {
 }
 
 Ship.prototype.update = function(config) {
-  this.width = config.width || this.width
+  this.size = config.size
   this.coords = config.coords || this.coords
   this.playboard = config.playboard || this.playboard
 }
 
 Ship.prototype.draw = function() {
   if (this.health > 0) {
-    this.ctx.fillStyle = !this.isProtected() ? 'red' : 'blue'
-    this.ctx.fillRect(this.coords.x - this.width / 2, this.coords.y - this.width / 2, this.width, this.width)
+    this.ctx.drawImage(
+      this.image,
+      this.coords.x - this.size.width / 2,
+      this.coords.y - this.size.height / 2,
+      this.size.width,
+      this.size.height
+    )
   }
 }
 

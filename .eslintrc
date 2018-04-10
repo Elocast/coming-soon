@@ -18,6 +18,7 @@
     "chai": true,
     "expect": true,
     "requestAnimationFrame": true,
-    "mozRequestAnimationFrame": true
+    "mozRequestAnimationFrame": true,
+    "Image": true
   }
 }
