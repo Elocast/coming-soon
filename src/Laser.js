@@ -1,7 +1,7 @@
 function Laser(config) {
   this.size = {
-    width: (config.size && config.size.width) ? config.size.width : 4,
-    height: (config.size && config.size.height) ? config.size.height : 12
+    width: (config.size && config.size.width) ? config.size.width : 5,
+    height: (config.size && config.size.height) ? config.size.height : 20
   }
   this.moveRatio = config.moveRatio || 4
 
