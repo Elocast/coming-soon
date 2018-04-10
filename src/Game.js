@@ -1,5 +1,6 @@
 import Ship from './Ship'
 import Laser from './Laser'
+import Comet from './Comet'
 
 function Game(canvas) {
   if (!canvas.getContext) {
@@ -18,6 +19,7 @@ function Game(canvas) {
   this.paused = false
   this.keys = []
   this.lasers = []
+  this.comets = []
 
   this.loops = 0
   this.nextGameTick = (new Date()).getTime()
@@ -55,6 +57,9 @@ Game.prototype.start = function() {
 }
 
 Game.prototype.update = function() {
+  this.comets.forEach(c => c.moveY())
+  this.comets = this.comets.filter(c => !(c.coords.y >= this.height))
+
   this.lasers.forEach(l => l.moveY())
   this.lasers = this.lasers.filter(l => !(l.coords.y === 0))
 
@@ -84,12 +89,29 @@ Game.prototype.update = function() {
       }))
     }
   }
+
+  if (this.comets.length < 2 &&
+    !Math.round(Math.random())
+  ) {
+    this.comets.push(new Comet({
+      coords: {
+        x: Math.random() * (this.width - 0),
+        y: -90
+      },
+      ctx: this.ctx,
+      playboard: {
+        height: this.height,
+        width: this.width
+      }
+    }))
+  }
 }
 
 Game.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.width, this.height)
-  this.ship.draw()
   this.lasers.forEach(l => l.draw())
+  this.comets.forEach(c => c.draw())
+  this.ship.draw()
 }
 
 export default Game
