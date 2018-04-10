@@ -50,15 +50,42 @@ Game.prototype.start = function() {
       width: this.width
     },
     coords: {
-      x: (this.width / 2) - 30,
+      x: (this.width / 2),
       y: this.height - 120
     }
   })
 }
 
 Game.prototype.update = function() {
+  if (!this.ship.isProtected()) {
+    this.comets.forEach(c => {
+      if (this.ship.coords.x - (this.ship.width / 2) < c.coords.x + (c.size.width / 2) &&
+        this.ship.coords.x + (this.ship.width / 2) > c.coords.x - (c.size.width / 2) &&
+        this.ship.coords.y - (this.ship.width / 2) < c.coords.y + (c.size.height / 2) &&
+        this.ship.coords.y + (this.ship.width / 2) > c.coords.y + (c.size.height / 2)
+      ) {
+        this.ship.collide()
+      }
+    })
+  }
+
   this.comets.forEach(c => c.moveY())
   this.comets = this.comets.filter(c => !(c.coords.y >= this.height))
+
+  this.lasers.forEach(l => {
+    this.comets.forEach((c, cIndex) => {
+      if (l.coords.x < c.coords.x + (c.size.width / 2) &&
+        l.coords.x + (l.width) > c.coords.x - (c.size.width / 2) &&
+        l.coords.y < c.coords.y + (c.size.height / 2) &&
+        l.coords.y + (l.height) > c.coords.y - (c.size.height / 2)
+      ) {
+        this.comets = [
+          ...this.comets.slice(0, cIndex),
+          ...this.comets.slice(cIndex + 1)
+        ]
+      }
+    })
+  })
 
   this.lasers.forEach(l => l.moveY())
   this.lasers = this.lasers.filter(l => !(l.coords.y === 0))
@@ -78,7 +105,7 @@ Game.prototype.update = function() {
       this.lasers.push(new Laser({
         coords: {
           ...this.ship.coords,
-          x: this.ship.coords.x + this.ship.width / 2
+          x: this.ship.coords.x
         },
         ctx: this.ctx,
         playboard: {
@@ -90,20 +117,38 @@ Game.prototype.update = function() {
     }
   }
 
-  if (this.comets.length < 2 &&
-    !Math.round(Math.random())
-  ) {
-    this.comets.push(new Comet({
+  if (this.comets.length < 2 && !Math.round(Math.random())) {
+    const nConfig = {
       coords: {
         x: Math.random() * (this.width - 0),
         y: -90
-      },
-      ctx: this.ctx,
-      playboard: {
-        height: this.height,
-        width: this.width
       }
-    }))
+    }
+
+    let collision = false
+    this.comets.forEach(c => {
+      if (c.coords.x < nConfig.coords.x + 90 &&
+        c.coords.x + (c.size.width) > nConfig.coords.x &&
+        c.coords.y < nConfig.coords.y + 90 &&
+        c.coords.y + (c.size.height) > nConfig.coords.y
+      ) {
+        collision = true
+      }
+    })
+
+    if (!collision) {
+      this.comets.push(new Comet({
+        coords: {
+          x: Math.random() * (this.width - 0),
+          y: -90
+        },
+        ctx: this.ctx,
+        playboard: {
+          height: this.height,
+          width: this.width
+        }
+      }))
+    }
   }
 }
 

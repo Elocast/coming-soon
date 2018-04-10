@@ -4,16 +4,29 @@ function Ship(config) {
   this.playboard = config.playboard
   this.ctx = config.ctx
   this.moveRatio = 8
+  this.health = 3
+  this.protectUntil = (new Date()).getTime()
+}
+
+Ship.prototype.collide = function() {
+  if (!this.isProtected()) {
+    this.health--
+    this.protectUntil = (new Date()).getTime() + 3000
+  }
+}
+
+Ship.prototype.isProtected = function() {
+  return this.protectUntil > (new Date()).getTime()
 }
 
 Ship.prototype.moveX = function(left) {
   let pos = this.coords.x + (left ? -this.moveRatio : this.moveRatio)
-  if (pos < 0) {
-    pos = 0
+  if (pos < this.width / 2) {
+    pos = this.width / 2
   }
 
-  if (pos + this.width >= this.playboard.width) {
-    pos = this.playboard.width - this.width
+  if (pos + this.width / 2 >= this.playboard.width) {
+    pos = this.playboard.width - this.width / 2
   }
 
   this.coords = {
@@ -29,8 +42,10 @@ Ship.prototype.update = function(config) {
 }
 
 Ship.prototype.draw = function() {
-  this.ctx.fillStyle = '#000'
-  this.ctx.fillRect(this.coords.x, this.coords.y, this.width, this.width)
+  if (this.health > 0) {
+    this.ctx.fillStyle = !this.isProtected() ? 'red' : 'blue'
+    this.ctx.fillRect(this.coords.x - this.width / 2, this.coords.y - this.width / 2, this.width, this.width)
+  }
 }
 
 export default Ship
