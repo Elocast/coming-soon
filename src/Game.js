@@ -78,9 +78,9 @@ Game.prototype.update = function() {
   this.lasers.forEach(l => {
     this.comets.forEach((c, cIndex) => {
       if (l.coords.x < c.coords.x + (c.size.width / 2) &&
-        l.coords.x + (l.width) > c.coords.x - (c.size.width / 2) &&
+        l.coords.x + (l.size.width) > c.coords.x - (c.size.width / 2) &&
         l.coords.y < c.coords.y + (c.size.height / 2) &&
-        l.coords.y + (l.height) > c.coords.y - (c.size.height / 2)
+        l.coords.y + (l.size.height) > c.coords.y - (c.size.height / 2)
       ) {
         this.comets = [
           ...this.comets.slice(0, cIndex),
@@ -108,7 +108,7 @@ Game.prototype.update = function() {
       this.lasers.push(new Laser({
         coords: {
           ...this.ship.coords,
-          x: this.ship.coords.x
+          y: this.ship.coords.y - (this.ship.size.height / 2)
         },
         ctx: this.ctx,
         playboard: {
