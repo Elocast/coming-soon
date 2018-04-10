@@ -8,6 +8,7 @@ function Game(canvas) {
 
   this.canvas = canvas
   this.canvas.tabIndex = 1000
+  this.canvas.focus()
 
   this.height = this.canvas.height = 540
   this.width = this.canvas.width = 500
