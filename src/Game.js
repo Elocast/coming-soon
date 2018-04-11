@@ -116,6 +116,10 @@ Game.prototype.update = function() {
 
   if (!this.ship.isProtected() && this.ship.isAlive()) {
     this.comets.forEach(c => {
+      if (c.exploded) {
+        return
+      }
+
       if (this.ship.coords.x - (this.ship.size.width / 2) < c.coords.x + (c.size.width / 2) &&
         this.ship.coords.x + (this.ship.size.width / 2) > c.coords.x - (c.size.width / 2) &&
         this.ship.coords.y - (this.ship.size.height / 2) < c.coords.y + (c.size.height / 2) &&
@@ -128,19 +132,22 @@ Game.prototype.update = function() {
   }
 
   this.comets.forEach(c => c.moveY())
-  this.comets = this.comets.filter(c => !(c.coords.y >= this.height))
+  this.comets = this.comets.filter(c => !(
+    (c.coords.y >= this.height) 
+    || (c.exploded && (c.explosionTime + c.explodeStart) < (new Date().getTime()))))
 
   this.lasers.forEach((l, lIndex) => {
     this.comets.forEach((c, cIndex) => {
+      if (c.exploded) {
+        return
+      }
+
       if (l.coords.x < c.coords.x + (c.size.width / 2) &&
         l.coords.x + (l.size.width) > c.coords.x - (c.size.width / 2) &&
         l.coords.y < c.coords.y + (c.size.height / 2) &&
         l.coords.y + (l.size.height) > c.coords.y - (c.size.height / 2)
       ) {
-        this.comets = [
-          ...this.comets.slice(0, cIndex),
-          ...this.comets.slice(cIndex + 1)
-        ]
+        c.collide()
 
         this.lasers = [
           ...this.lasers.slice(0, lIndex),

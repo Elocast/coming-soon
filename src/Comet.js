@@ -2,6 +2,18 @@ import cometImage1 from './sprites/comet1.svg'
 import cometImage2 from './sprites/comet2.svg'
 import cometImage3 from './sprites/comet3.svg'
 
+import shipExplosionImage1 from './sprites/ship_explosion1.svg'
+import shipExplosionImage2 from './sprites/ship_explosion2.svg'
+import shipExplosionImage3 from './sprites/ship_explosion3.svg'
+import shipExplosionImage4 from './sprites/ship_explosion4.svg'
+
+const EXPLOSION_ANIMATION = [
+  shipExplosionImage4,
+  shipExplosionImage3,
+  shipExplosionImage2,
+  shipExplosionImage1
+]
+
 const COMET_TYPE = [
   {
     height: 105,
@@ -32,6 +44,7 @@ function Comet(config) {
   this.coords = config.coords
   this.playboard = config.playboard
   this.ctx = config.ctx
+  this.explosionTime = 800
 
   this.moveRatio = COMET_TYPE[this.type].moveRatio
   this.size = {
@@ -44,12 +57,19 @@ function Comet(config) {
   this.points = COMET_TYPE[this.type].points || 50
 }
 
-Comet.prototype.moveY = function() {
-  let pos = this.coords.y + this.moveRatio
+Comet.prototype.collide = function() {
+  this.exploded = true
+  this.explodeStart = (new Date()).getTime()
+}
 
-  this.coords = {
-    ...this.coords,
-    y: pos
+Comet.prototype.moveY = function() {
+  if (!this.exploded) {
+    let pos = this.coords.y + this.moveRatio
+  
+    this.coords = {
+      ...this.coords,
+      y: pos
+    }
   }
 }
 
@@ -60,13 +80,34 @@ Comet.prototype.update = function(config) {
 }
 
 Comet.prototype.draw = function() {
-  this.ctx.drawImage(
-    this.image,
-    this.coords.x - this.size.width / 2,
-    this.coords.y - this.size.height / 2,
-    this.size.width,
-    this.size.height
-  )
+  if (this.exploded) {
+    const animationStep = 100 / EXPLOSION_ANIMATION.length
+    const animationPerc = (((this.explodeStart + this.explosionTime) - (new Date()).getTime()) / ((this.explodeStart + this.explosionTime) - this.explodeStart)) * 100
+    const index = Math.round(animationPerc / animationStep)
+
+    const image = new Image()
+    const sprite = EXPLOSION_ANIMATION[index - 1]
+
+    if (sprite) {
+      image.src = sprite
+      this.ctx.drawImage(
+        image,
+        this.coords.x - this.size.width / 2,
+        this.coords.y - this.size.height / 2,
+        this.size.width,
+        this.size.height
+      )
+    }
+
+  } else {
+    this.ctx.drawImage(
+      this.image,
+      this.coords.x - this.size.width / 2,
+      this.coords.y - this.size.height / 2,
+      this.size.width,
+      this.size.height
+    )
+  }
 }
 
 export default Comet
