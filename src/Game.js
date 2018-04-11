@@ -236,6 +236,8 @@ Game.prototype.update = function() {
     }
   }
 
+  this.ship.update({})
+
   this.footer.update({
     score: this.score,
     scoreMultiplier: this.scoreMultiplier,
