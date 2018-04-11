@@ -157,19 +157,19 @@ Game.prototype.update = function() {
   this.lasers = this.lasers.filter(l => !(l.coords.y === 0))
 
   if (this.keys[37]) {
-    if (this.ship.isAlive() && this.started) {
+    if (!this.ship.isProtected() && this.ship.isAlive() && this.started) {
       this.ship.moveX(true)
     }
   }
 
   if (this.keys[39]) {
-    if (this.ship.isAlive() && this.started) {
+    if (!this.ship.isProtected() && this.ship.isAlive() && this.started) {
       this.ship.moveX(false)
     }
   }
 
   if (this.keys[88]) {
-    if (this.ship.isAlive() && this.started) {
+    if (!this.ship.isProtected() && this.ship.isAlive() && this.started) {
       if (this.lasers.length < 1 ||
         (new Date()).getTime() - this.lasers.slice().pop().createdAt >= 200
       ) {
