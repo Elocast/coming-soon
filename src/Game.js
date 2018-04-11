@@ -137,30 +137,32 @@ Game.prototype.update = function() {
   this.lasers.forEach(l => l.moveY())
   this.lasers = this.lasers.filter(l => !(l.coords.y === 0))
 
-  if (this.keys[37]) {
-    this.ship.moveX(true)
-  }
+  if (this.ship.health > 0) {
+    if (this.keys[37]) {
+      this.ship.moveX(true)
+    }
 
-  if (this.keys[39]) {
-    this.ship.moveX(false)
-  }
+    if (this.keys[39]) {
+      this.ship.moveX(false)
+    }
 
-  if (this.keys[88]) {
-    if (this.lasers.length < 1 ||
-      (new Date()).getTime() - this.lasers.slice().pop().createdAt >= 200
-    ) {
-      this.lasers.push(new Laser({
-        coords: {
-          ...this.ship.coords,
-          y: this.ship.coords.y - (this.ship.size.height / 2)
-        },
-        ctx: this.ctx,
-        playboard: {
-          height: this.height,
-          width: this.width
-        },
-        moveRatio: 18
-      }))
+    if (this.keys[88]) {
+      if (this.lasers.length < 1 ||
+        (new Date()).getTime() - this.lasers.slice().pop().createdAt >= 200
+      ) {
+        this.lasers.push(new Laser({
+          coords: {
+            ...this.ship.coords,
+            y: this.ship.coords.y - (this.ship.size.height / 2)
+          },
+          ctx: this.ctx,
+          playboard: {
+            height: this.height,
+            width: this.width
+          },
+          moveRatio: 18
+        }))
+      }
     }
   }
 
