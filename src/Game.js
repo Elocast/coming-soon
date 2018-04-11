@@ -26,6 +26,8 @@ function Game(canvas) {
 
   this.paused = false
   this.score = 0
+  this.scoreMultiplier = 1
+
   this.keys = []
   this.lasers = []
   this.comets = []
@@ -106,6 +108,7 @@ Game.prototype.update = function() {
         this.ship.coords.y + (this.ship.size.height / 2) > c.coords.y - (c.size.height / 2)
       ) {
         this.ship.collide()
+        this.scoreMultiplier = 1
       }
     })
   }
@@ -125,7 +128,8 @@ Game.prototype.update = function() {
           ...this.comets.slice(cIndex + 1)
         ]
 
-        this.score += c.points || 50
+        this.scoreMultiplier = this.scoreMultiplier < 5 ? this.scoreMultiplier + 1 : 5
+        this.score += (c.points || 50) * this.scoreMultiplier
       }
     })
   })
@@ -222,6 +226,11 @@ Game.prototype.draw = function() {
   }
 
   this.ctx.font = '18px EloCastRETRO'
+  if (this.scoreMultiplier > 1) {
+    this.ctx.fillStyle = '#fe898a'
+    this.ctx.fillText(`x${this.scoreMultiplier}`, 7, this.height - 38)
+  }
+
   this.ctx.fillStyle = '#fff'
   this.ctx.fillText(numberToScore(this.score, 6), 9, this.height - 10)
 }
