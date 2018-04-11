@@ -155,7 +155,7 @@ Game.prototype.update = function() {
     }))
   }
 
-  if (this.comets.length < 2 && !Math.round(Math.random())) {
+  if (this.comets.length < 5 && !Math.round(Math.random())) {
     const nConfig = {
       coords: {
         x: Math.random() * (this.width - 0),
