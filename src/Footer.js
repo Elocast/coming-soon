@@ -38,6 +38,7 @@ Footer.prototype.draw = function() {
     )
   }
 
+  this.ctx.textAlign = 'left'
   this.ctx.font = '18px EloCastRETRO'
   if (this.scoreMultiplier > 1) {
     this.ctx.fillStyle = '#fe898a'

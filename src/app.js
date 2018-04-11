@@ -9,7 +9,6 @@ injectFontFace('EloCastRETRO', elocastRetroFont)
 document.addEventListener('DOMContentLoaded', function() {
   const canvas = document.querySelector('canvas')
   const game = new Game(canvas)
-  game.start()
 
   const mainLoop = (function() {
     const skipTicks = 1000 / game.fps

@@ -3,6 +3,7 @@ import Laser from './Laser'
 import Comet from './Comet'
 import Star from './Star'
 import Footer from './Footer'
+import WelcomeScreen from './WelcomeScreen'
 
 import bgImage from './sprites/bg.svg'
 
@@ -20,6 +21,7 @@ function Game(canvas) {
 
   this.ctx = canvas.getContext('2d')
 
+  this.started = false
   this.paused = false
   this.score = 0
   this.scoreMultiplier = 1
@@ -39,9 +41,25 @@ function Game(canvas) {
   this.bgImage = new Image()
   this.bgImage.src = bgImage
 
+  this.ship = new Ship({
+    size: {
+      height: 60,
+      width: 52
+    },
+    ctx: this.ctx,
+    playboard: {
+      height: this.height,
+      width: this.width
+    },
+    coords: {
+      x: (this.width / 2),
+      y: this.height - 90
+    }
+  })
+
   this.footer = new Footer({
     ctx: this.ctx,
-    health: this.health,
+    health: this.ship.health,
     score: this.score,
     scoreMultiplier: this.scoreMultiplier,
     playboard: {
@@ -49,6 +67,16 @@ function Game(canvas) {
       width: this.width
     }
   })
+
+  this.welcomeScreen = new WelcomeScreen({
+    ctx: this.ctx,
+    playboard: {
+      height: this.height,
+      width: this.width
+    }
+  })
+
+  this.genRandomStars()
 
   this.canvas.addEventListener('keyup', this.keyUp.bind(this))
   this.canvas.addEventListener('keydown', this.keyDown.bind(this))
@@ -76,23 +104,7 @@ Game.prototype.genRandomStars = function() {
 
 // start the game
 Game.prototype.start = function() {
-  this.genRandomStars()
-  this.ship = new Ship({
-    size: {
-      height: 60,
-      width: 52
-    },
-    ctx: this.ctx,
-    playboard: {
-      height: this.height,
-      width: this.width
-    },
-    coords: {
-      x: (this.width / 2),
-      y: this.height - 90
-    }
-  })
-
+  this.started = true
   this.footer.update({
     health: this.ship.health
   })
@@ -144,16 +156,20 @@ Game.prototype.update = function() {
   this.lasers.forEach(l => l.moveY())
   this.lasers = this.lasers.filter(l => !(l.coords.y === 0))
 
-  if (this.ship.isAlive()) {
-    if (this.keys[37]) {
+  if (this.keys[37]) {
+    if (this.ship.isAlive() && this.started) {
       this.ship.moveX(true)
     }
+  }
 
-    if (this.keys[39]) {
+  if (this.keys[39]) {
+    if (this.ship.isAlive() && this.started) {
       this.ship.moveX(false)
     }
+  }
 
-    if (this.keys[88]) {
+  if (this.keys[88]) {
+    if (this.ship.isAlive() && this.started) {
       if (this.lasers.length < 1 ||
         (new Date()).getTime() - this.lasers.slice().pop().createdAt >= 200
       ) {
@@ -170,6 +186,8 @@ Game.prototype.update = function() {
           moveRatio: 18
         }))
       }
+    } else if (!this.started) {
+      this.start()
     }
   }
 
@@ -187,7 +205,7 @@ Game.prototype.update = function() {
     }))
   }
 
-  if (this.ship.isAlive()) {
+  if (this.ship.isAlive() && this.started) {
     if (this.comets.length < 5 && !Math.round(Math.random())) {
       const nConfig = {
         coords: {
@@ -233,6 +251,9 @@ Game.prototype.draw = function() {
   this.comets.forEach(c => c.draw())
   this.ship.draw()
   this.footer.draw()
+  if (!this.started) {
+    this.welcomeScreen.draw()
+  }
 }
 
 export default Game
