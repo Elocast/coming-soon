@@ -2,13 +2,9 @@ import Ship from './Ship'
 import Laser from './Laser'
 import Comet from './Comet'
 import Star from './Star'
-
-import { numberToScore } from './utils'
+import Footer from './Footer'
 
 import bgImage from './sprites/bg.svg'
-import footerImage from './sprites/footer.svg'
-import heartImage from './sprites/heart.svg'
-import emptyHeartImage from './sprites/empty_heart.svg'
 
 function Game(canvas) {
   if (!canvas.getContext) {
@@ -43,14 +39,16 @@ function Game(canvas) {
   this.bgImage = new Image()
   this.bgImage.src = bgImage
 
-  this.footerImage = new Image()
-  this.footerImage.src = footerImage
-
-  this.heartImage = new Image()
-  this.heartImage.src = heartImage
-
-  this.emptyHeartImage = new Image()
-  this.emptyHeartImage.src = emptyHeartImage
+  this.footer = new Footer({
+    ctx: this.ctx,
+    health: this.health,
+    score: this.score,
+    scoreMultiplier: this.scoreMultiplier,
+    playboard: {
+      height: this.height,
+      width: this.width
+    }
+  })
 
   this.canvas.addEventListener('keyup', this.keyUp.bind(this))
   this.canvas.addEventListener('keydown', this.keyDown.bind(this))
@@ -94,13 +92,17 @@ Game.prototype.start = function() {
       y: this.height - 90
     }
   })
+
+  this.footer.update({
+    health: this.ship.health
+  })
 }
 
 Game.prototype.update = function() {
   this.stars.forEach(s => s.moveY())
   this.stars = this.stars.filter(s => !(s.coords.y >= this.height))
 
-  if (!this.ship.isProtected()) {
+  if (!this.ship.isProtected() && this.ship.isAlive()) {
     this.comets.forEach(c => {
       if (this.ship.coords.x - (this.ship.size.width / 2) < c.coords.x + (c.size.width / 2) &&
         this.ship.coords.x + (this.ship.size.width / 2) > c.coords.x - (c.size.width / 2) &&
@@ -116,7 +118,7 @@ Game.prototype.update = function() {
   this.comets.forEach(c => c.moveY())
   this.comets = this.comets.filter(c => !(c.coords.y >= this.height))
 
-  this.lasers.forEach(l => {
+  this.lasers.forEach((l, lIndex) => {
     this.comets.forEach((c, cIndex) => {
       if (l.coords.x < c.coords.x + (c.size.width / 2) &&
         l.coords.x + (l.size.width) > c.coords.x - (c.size.width / 2) &&
@@ -128,6 +130,11 @@ Game.prototype.update = function() {
           ...this.comets.slice(cIndex + 1)
         ]
 
+        this.lasers = [
+          ...this.lasers.slice(0, lIndex),
+          ...this.lasers.slice(lIndex + 1)
+        ]
+
         this.scoreMultiplier = this.scoreMultiplier < 5 ? this.scoreMultiplier + 1 : 5
         this.score += (c.points || 50) * this.scoreMultiplier
       }
@@ -137,7 +144,7 @@ Game.prototype.update = function() {
   this.lasers.forEach(l => l.moveY())
   this.lasers = this.lasers.filter(l => !(l.coords.y === 0))
 
-  if (this.ship.health > 0) {
+  if (this.ship.isAlive()) {
     if (this.keys[37]) {
       this.ship.moveX(true)
     }
@@ -180,34 +187,42 @@ Game.prototype.update = function() {
     }))
   }
 
-  if (this.comets.length < 5 && !Math.round(Math.random())) {
-    const nConfig = {
-      coords: {
-        x: Math.random() * (this.width - 0),
-        y: Math.floor(Math.random() * (-this.height - -90))
-      },
-      ctx: this.ctx,
-      playboard: {
-        height: this.height,
-        width: this.width
+  if (this.ship.isAlive()) {
+    if (this.comets.length < 5 && !Math.round(Math.random())) {
+      const nConfig = {
+        coords: {
+          x: Math.random() * (this.width - 0),
+          y: Math.floor(Math.random() * (-this.height - -90))
+        },
+        ctx: this.ctx,
+        playboard: {
+          height: this.height,
+          width: this.width
+        }
       }
-    }
 
-    let collision = false
-    this.comets.forEach(c => {
-      if (c.coords.x < nConfig.coords.x + 90 &&
-        c.coords.x + (c.size.width) > nConfig.coords.x &&
-        c.coords.y < nConfig.coords.y + 90 &&
-        c.coords.y + (c.size.height) > nConfig.coords.y
-      ) {
-        collision = true
+      let collision = false
+      this.comets.forEach(c => {
+        if (c.coords.x < nConfig.coords.x + 90 &&
+          c.coords.x + (c.size.width) > nConfig.coords.x &&
+          c.coords.y < nConfig.coords.y + 90 &&
+          c.coords.y + (c.size.height) > nConfig.coords.y
+        ) {
+          collision = true
+        }
+      })
+
+      if (!collision) {
+        this.comets.push(new Comet(nConfig))
       }
-    })
-
-    if (!collision) {
-      this.comets.push(new Comet(nConfig))
     }
   }
+
+  this.footer.update({
+    score: this.score,
+    scoreMultiplier: this.scoreMultiplier,
+    health: this.ship.health
+  })
 }
 
 Game.prototype.draw = function() {
@@ -217,24 +232,7 @@ Game.prototype.draw = function() {
   this.lasers.forEach(l => l.draw())
   this.comets.forEach(c => c.draw())
   this.ship.draw()
-
-  this.ctx.drawImage(this.footerImage, 0, this.height - this.footerImage.height)
-  for (let i = 0; i < 3; i++) {
-    this.ctx.drawImage(
-      ((i + 1) <= this.ship.health) ? this.heartImage : this.emptyHeartImage,
-      this.width - ((this.heartImage.width + 5) * (i + 1)) - 5,
-      this.height - this.heartImage.height - 10
-    )
-  }
-
-  this.ctx.font = '18px EloCastRETRO'
-  if (this.scoreMultiplier > 1) {
-    this.ctx.fillStyle = '#fe898a'
-    this.ctx.fillText(`x${this.scoreMultiplier}`, 7, this.height - 38)
-  }
-
-  this.ctx.fillStyle = '#fff'
-  this.ctx.fillText(numberToScore(this.score, 6), 9, this.height - 10)
+  this.footer.draw()
 }
 
 export default Game

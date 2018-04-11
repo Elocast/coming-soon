@@ -24,6 +24,10 @@ Ship.prototype.isProtected = function() {
   return this.protectUntil > (new Date()).getTime()
 }
 
+Ship.prototype.isAlive = function() {
+  return this.health > 0
+}
+
 Ship.prototype.moveX = function(left) {
   let pos = this.coords.x + (left ? -this.moveRatio : this.moveRatio)
   if (pos < this.size.width / 2) {
