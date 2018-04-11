@@ -11,8 +11,8 @@ function Game(canvas) {
   this.canvas.tabIndex = 1000
   this.canvas.focus()
 
-  this.height = this.canvas.height = 540
-  this.width = this.canvas.width = 500
+  this.height = this.canvas.height = 547
+  this.width = this.canvas.width = 572
 
   this.ctx = canvas.getContext('2d')
 
@@ -27,6 +27,9 @@ function Game(canvas) {
   this.fps = 60
   this.maxFrameSkip = 10
   this.skipTicks = 1000 / this.fps
+
+  this.bgImage = new Image()
+  this.bgImage.src = '/sprites/bg.svg'
 
   this.canvas.addEventListener('keyup', this.keyUp.bind(this))
   this.canvas.addEventListener('keydown', this.keyDown.bind(this))
@@ -43,7 +46,10 @@ Game.prototype.keyDown = function(e) {
 // start the game
 Game.prototype.start = function() {
   this.ship = new Ship({
-    width: 60,
+    size: {
+      height: 60,
+      width: 52
+    },
     ctx: this.ctx,
     playboard: {
       height: this.height,
@@ -60,9 +66,9 @@ Game.prototype.update = function() {
   if (!this.ship.isProtected()) {
     this.comets.forEach(c => {
       if (this.ship.coords.x - (this.ship.width / 2) < c.coords.x + (c.size.width / 2) &&
-        this.ship.coords.x + (this.ship.width / 2) > c.coords.x - (c.size.width / 2) &&
-        this.ship.coords.y - (this.ship.width / 2) < c.coords.y + (c.size.height / 2) &&
-        this.ship.coords.y + (this.ship.width / 2) > c.coords.y + (c.size.height / 2)
+        this.ship.coords.x + (this.ship.size.width / 2) > c.coords.x - (c.size.width / 2) &&
+        this.ship.coords.y - (this.ship.size.width / 2) < c.coords.y + (c.size.height / 2) &&
+        this.ship.coords.y + (this.ship.size.width / 2) > c.coords.y + (c.size.height / 2)
       ) {
         this.ship.collide()
       }
@@ -75,9 +81,9 @@ Game.prototype.update = function() {
   this.lasers.forEach(l => {
     this.comets.forEach((c, cIndex) => {
       if (l.coords.x < c.coords.x + (c.size.width / 2) &&
-        l.coords.x + (l.width) > c.coords.x - (c.size.width / 2) &&
+        l.coords.x + (l.size.width) > c.coords.x - (c.size.width / 2) &&
         l.coords.y < c.coords.y + (c.size.height / 2) &&
-        l.coords.y + (l.height) > c.coords.y - (c.size.height / 2)
+        l.coords.y + (l.size.height) > c.coords.y - (c.size.height / 2)
       ) {
         this.comets = [
           ...this.comets.slice(0, cIndex),
@@ -105,7 +111,7 @@ Game.prototype.update = function() {
       this.lasers.push(new Laser({
         coords: {
           ...this.ship.coords,
-          x: this.ship.coords.x
+          y: this.ship.coords.y - (this.ship.size.height / 2)
         },
         ctx: this.ctx,
         playboard: {
@@ -154,6 +160,7 @@ Game.prototype.update = function() {
 
 Game.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.width, this.height)
+  this.ctx.drawImage(this.bgImage, 0, 0)
   this.lasers.forEach(l => l.draw())
   this.comets.forEach(c => c.draw())
   this.ship.draw()

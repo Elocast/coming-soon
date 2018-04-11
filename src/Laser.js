@@ -1,16 +1,21 @@
 function Laser(config) {
-  this.width = 4
-  this.height = 8
+  this.size = {
+    width: (config.size && config.size.width) ? config.size.width : 5,
+    height: (config.size && config.size.height) ? config.size.height : 20
+  }
   this.moveRatio = config.moveRatio || 4
 
   this.coords = {
-    x: config.coords.x - this.width / 2,
-    y: config.coords.y - this.height - 4
+    x: config.coords.x,
+    y: config.coords.y
   }
   this.playboard = config.playboard
   this.enemy = !!config.enemy
   this.ctx = config.ctx
   this.createdAt = (new Date()).getTime()
+
+  this.image = new Image()
+  this.image.src = '/sprites/laser.svg'
 }
 
 Laser.prototype.moveY = function() {
@@ -31,16 +36,27 @@ Laser.prototype.moveY = function() {
 }
 
 Laser.prototype.update = function(config) {
-  this.width = config.width || this.width
-  this.coords = config.coords || this.coords
+  this.size = {
+    width: config.size.width || this.size.width,
+    height: config.size.height || this.size.height
+  }
+  this.coords = {
+    x: config.coords.x || this.coords.x,
+    y: config.coords.y || this.coords.y
+  }
   this.playboard = config.playboard || this.playboard
   this.enemy = config.enemy || this.enemy
   this.moveRatio = config.moveRatio || config.moveRatio
 }
 
 Laser.prototype.draw = function() {
-  this.ctx.fillStyle = '#fff'
-  this.ctx.fillRect(this.coords.x, this.coords.y, this.width, this.height)
+  this.ctx.drawImage(
+    this.image,
+    this.coords.x - this.size.width / 2,
+    this.coords.y - this.size.height / 2,
+    this.size.width,
+    this.size.height
+  )
 }
 
 export default Laser
