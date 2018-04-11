@@ -72,7 +72,7 @@ Game.prototype.start = function() {
     },
     coords: {
       x: (this.width / 2),
-      y: this.height - 120
+      y: this.height - 90
     }
   })
 }
