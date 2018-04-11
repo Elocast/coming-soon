@@ -18,7 +18,7 @@ function Ship(config) {
   this.playboard = config.playboard
   this.ctx = config.ctx
   this.moveRatio = 8
-  this.health = 30
+  this.health = 3
   this.explosionTime = 800
   this.protectTime = 2000
   this.protectStart = (new Date()).getTime()
