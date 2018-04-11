@@ -160,6 +160,11 @@ Game.prototype.update = function() {
       coords: {
         x: Math.random() * (this.width - 0),
         y: -90
+      },
+      ctx: this.ctx,
+      playboard: {
+        height: this.height,
+        width: this.width
       }
     }
 
@@ -175,17 +180,7 @@ Game.prototype.update = function() {
     })
 
     if (!collision) {
-      this.comets.push(new Comet({
-        coords: {
-          x: Math.random() * (this.width - 0),
-          y: -90
-        },
-        ctx: this.ctx,
-        playboard: {
-          height: this.height,
-          width: this.width
-        }
-      }))
+      this.comets.push(new Comet(nConfig))
     }
   }
 }
