@@ -1,3 +1,5 @@
+import shipImage from './sprites/ship.svg'
+
 function Ship(config) {
   this.size = config.size
   this.coords = config.coords
@@ -8,7 +10,7 @@ function Ship(config) {
   this.protectUntil = (new Date()).getTime()
 
   this.image = new Image()
-  this.image.src = '/sprites/ship.svg'
+  this.image.src = shipImage
 }
 
 Ship.prototype.collide = function() {

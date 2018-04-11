@@ -1,21 +1,25 @@
+import cometImage1 from './sprites/comet1.svg'
+import cometImage2 from './sprites/comet2.svg'
+import cometImage3 from './sprites/comet3.svg'
+
 const COMET_TYPE = [
   {
     height: 105,
     width: 83,
     moveRatio: 10,
-    src: '/sprites/comet1.svg'
+    src: cometImage1
   },
   {
     height: 59,
     width: 59,
     moveRatio: 4,
-    src: '/sprites/comet2.svg'
+    src: cometImage2
   },
   {
     height: 70,
     width: 70,
     moveRatio: 8,
-    src: '/sprites/comet3.svg'
+    src: cometImage3
   }
 ]
 

@@ -1,3 +1,5 @@
+import laserImage from './sprites/laser.svg'
+
 function Laser(config) {
   this.size = {
     width: (config.size && config.size.width) ? config.size.width : 5,
@@ -15,7 +17,7 @@ function Laser(config) {
   this.createdAt = (new Date()).getTime()
 
   this.image = new Image()
-  this.image.src = '/sprites/laser.svg'
+  this.image.src = laserImage
 }
 
 Laser.prototype.moveY = function() {

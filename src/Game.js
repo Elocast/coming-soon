@@ -3,6 +3,11 @@ import Laser from './Laser'
 import Comet from './Comet'
 import Star from './Star'
 
+import bgImage from './sprites/bg.svg'
+import footerImage from './sprites/footer.svg'
+import heartImage from './sprites/heart.svg'
+import emptyHeartImage from './sprites/empty_heart.svg'
+
 function Game(canvas) {
   if (!canvas.getContext) {
     throw new Error('Canvas not supported. Quit.')
@@ -31,16 +36,16 @@ function Game(canvas) {
   this.skipTicks = 1000 / this.fps
 
   this.bgImage = new Image()
-  this.bgImage.src = '/sprites/bg.svg'
+  this.bgImage.src = bgImage
 
   this.footerImage = new Image()
-  this.footerImage.src = '/sprites/footer.svg'
+  this.footerImage.src = footerImage
 
   this.heartImage = new Image()
-  this.heartImage.src = '/sprites/heart.svg'
+  this.heartImage.src = heartImage
 
   this.emptyHeartImage = new Image()
-  this.emptyHeartImage.src = '/sprites/empty_heart.svg'
+  this.emptyHeartImage.src = emptyHeartImage
 
   this.canvas.addEventListener('keyup', this.keyUp.bind(this))
   this.canvas.addEventListener('keydown', this.keyDown.bind(this))
