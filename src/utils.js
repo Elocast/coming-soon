@@ -1,4 +1,4 @@
-(function() {
+export const setupLoop = function() {
   let onEveryFrame
   if (window.requestAnimationFrame) {
     onEveryFrame = function(cb) {
@@ -23,4 +23,8 @@
   }
 
   window.onEveryFrame = onEveryFrame
-})()
+}
+
+export default {
+  setupLoop
+}

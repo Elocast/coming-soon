@@ -1,5 +1,7 @@
 import Game from './Game'
-import './utils'
+import { setupLoop } from './utils'
+
+setupLoop()
 
 document.addEventListener('DOMContentLoaded', function() {
   const canvas = document.querySelector('canvas')
