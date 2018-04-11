@@ -159,7 +159,7 @@ Game.prototype.update = function() {
     const nConfig = {
       coords: {
         x: Math.random() * (this.width - 0),
-        y: -90
+        y: Math.floor(Math.random() * (-this.height - -90))
       },
       ctx: this.ctx,
       playboard: {
