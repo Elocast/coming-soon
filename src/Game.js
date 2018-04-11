@@ -33,6 +33,15 @@ function Game(canvas) {
   this.bgImage = new Image()
   this.bgImage.src = '/sprites/bg.svg'
 
+  this.footerImage = new Image()
+  this.footerImage.src = '/sprites/footer.svg'
+
+  this.heartImage = new Image()
+  this.heartImage.src = '/sprites/heart.svg'
+
+  this.emptyHeartImage = new Image()
+  this.emptyHeartImage.src = '/sprites/empty_heart.svg'
+
   this.canvas.addEventListener('keyup', this.keyUp.bind(this))
   this.canvas.addEventListener('keydown', this.keyDown.bind(this))
 }
@@ -192,6 +201,15 @@ Game.prototype.draw = function() {
   this.lasers.forEach(l => l.draw())
   this.comets.forEach(c => c.draw())
   this.ship.draw()
+
+  this.ctx.drawImage(this.footerImage, 0, this.height - this.footerImage.height)
+  for (let i = 0; i < 3; i++) {
+    this.ctx.drawImage(
+      ((i + 1) <= this.ship.health) ? this.heartImage : this.emptyHeartImage,
+      this.width - ((this.heartImage.width + 5) * (i + 1)) - 5,
+      this.height - this.heartImage.height - 10
+    )
+  }
 }
 
 export default Game

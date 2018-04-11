@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="571px" height="22px" viewBox="0 0 571 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Lines</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="Stream@2x-Copy" transform="translate(-435.000000, -621.000000)" stroke="#696FBD">
+            <g id="Lines" transform="translate(435.000000, 620.000000)">
+                <path d="M0.5,22.5 L569.964661,22.5" id="Line" stroke-opacity="0.397390172"></path>
+                <path d="M0.5,15.5 L569.964661,15.5" id="Line" stroke-opacity="0.3028476"></path>
+                <path d="M0.5,8.5 L569.964661,8.5" id="Line" stroke-opacity="0.195001132"></path>
+                <path d="M0.5,1.5 L569.964661,1.5" id="Line" stroke-opacity="0.0976845562"></path>
+            </g>
+        </g>
+    </g>
+</svg>
