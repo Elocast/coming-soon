@@ -7,18 +7,21 @@ const COMET_TYPE = [
     height: 105,
     width: 83,
     moveRatio: 10,
+    points: 150,
     src: cometImage1
   },
   {
     height: 59,
     width: 59,
     moveRatio: 4,
+    points: 50,
     src: cometImage2
   },
   {
     height: 70,
     width: 70,
     moveRatio: 8,
+    points: 100,
     src: cometImage3
   }
 ]
@@ -38,6 +41,7 @@ function Comet(config) {
 
   this.image = new Image()
   this.image.src = COMET_TYPE[this.type].src
+  this.points = COMET_TYPE[this.type].points || 50
 }
 
 Comet.prototype.moveY = function() {

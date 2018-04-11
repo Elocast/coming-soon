@@ -25,6 +25,7 @@ function Game(canvas) {
   this.ctx = canvas.getContext('2d')
 
   this.paused = false
+  this.score = 0
   this.keys = []
   this.lasers = []
   this.comets = []
@@ -123,6 +124,8 @@ Game.prototype.update = function() {
           ...this.comets.slice(0, cIndex),
           ...this.comets.slice(cIndex + 1)
         ]
+
+        this.score += c.points || 50
       }
     })
   })
@@ -220,7 +223,7 @@ Game.prototype.draw = function() {
 
   this.ctx.font = '18px EloCastRETRO'
   this.ctx.fillStyle = '#fff'
-  this.ctx.fillText(numberToScore(19, 6), 9, this.height - 10)
+  this.ctx.fillText(numberToScore(this.score, 6), 9, this.height - 10)
 }
 
 export default Game
