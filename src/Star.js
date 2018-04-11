@@ -14,7 +14,7 @@ function Star(config) {
   this.ctx = config.ctx
   this.color = config.color || COLORS[Math.floor((Math.random() * 3))]
 
-  this.moveRatio = 4
+  this.moveRatio = 12
 }
 
 Star.prototype.moveY = function() {
