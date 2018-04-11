@@ -3,6 +3,8 @@ import Laser from './Laser'
 import Comet from './Comet'
 import Star from './Star'
 
+import { printScore } from './utils'
+
 import bgImage from './sprites/bg.svg'
 import footerImage from './sprites/footer.svg'
 import heartImage from './sprites/heart.svg'
@@ -215,6 +217,10 @@ Game.prototype.draw = function() {
       this.height - this.heartImage.height - 10
     )
   }
+
+  this.ctx.font = '18px EloCastRETRO'
+  this.ctx.fillStyle = '#fff'
+  this.ctx.fillText(printScore(19, 6), 9, this.height - 10)
 }
 
 export default Game

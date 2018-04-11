@@ -1,7 +1,10 @@
 import Game from './Game'
-import { setupLoop } from './utils'
+import { setupLoop, injectFontFace } from './utils'
+
+import elocastRetroFont from './fonts/elocast_retro.ttf'
 
 setupLoop()
+injectFontFace('EloCastRETRO', elocastRetroFont)
 
 document.addEventListener('DOMContentLoaded', function() {
   const canvas = document.querySelector('canvas')

@@ -25,6 +25,30 @@ export const setupLoop = function() {
   window.onEveryFrame = onEveryFrame
 }
 
+export const injectFontFace = (fontName, fontUrl) => {
+  const newStyle = document.createElement('style')
+  newStyle.appendChild(
+    document.createTextNode(`\
+    @font-face {\
+      font-family: "${fontName}";\
+      src: url('${fontUrl}');\
+    }`)
+  )
+
+  document.head.appendChild(newStyle)
+}
+
+export const printScore = (num, len) => {
+  let output = num + ''
+  while (output.length < len) {
+    output = '0' + output
+  }
+
+  return output
+}
+
 export default {
-  setupLoop
+  setupLoop,
+  printScore,
+  injectFontFace
 }
