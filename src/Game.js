@@ -1,6 +1,7 @@
 import Ship from './Ship'
 import Laser from './Laser'
 import Comet from './Comet'
+import Star from './Star'
 
 function Game(canvas) {
   if (!canvas.getContext) {
@@ -20,6 +21,7 @@ function Game(canvas) {
   this.keys = []
   this.lasers = []
   this.comets = []
+  this.stars = []
 
   this.loops = 0
   this.nextGameTick = (new Date()).getTime()
@@ -43,8 +45,21 @@ Game.prototype.keyDown = function(e) {
   this.keys[e.keyCode] = true
 }
 
+Game.prototype.genRandomStars = function() {
+  for (let i = 0; i < 10; i++) {
+    this.stars.push(new Star({
+      coords: {
+        y: Math.floor(Math.random() * (this.height - 0)),
+        x: Math.floor(Math.random() * (this.width - 0))
+      },
+      ctx: this.ctx
+    }))
+  }
+}
+
 // start the game
 Game.prototype.start = function() {
+  this.genRandomStars()
   this.ship = new Ship({
     size: {
       height: 60,
@@ -63,6 +78,9 @@ Game.prototype.start = function() {
 }
 
 Game.prototype.update = function() {
+  this.stars.forEach(s => s.moveY())
+  this.stars = this.stars.filter(s => !(s.coords.y >= this.height))
+
   if (!this.ship.isProtected()) {
     this.comets.forEach(c => {
       if (this.ship.coords.x - (this.ship.width / 2) < c.coords.x + (c.size.width / 2) &&
@@ -123,6 +141,20 @@ Game.prototype.update = function() {
     }
   }
 
+  if (this.stars.length < 10) {
+    const nConfig = {
+      coords: {
+        x: Math.random() * (this.width - 0),
+        y: Math.floor(Math.random() * (-this.height - -90))
+      }
+    }
+
+    this.stars.push(new Star({
+      coords: nConfig.coords,
+      ctx: this.ctx
+    }))
+  }
+
   if (this.comets.length < 2 && !Math.round(Math.random())) {
     const nConfig = {
       coords: {
@@ -161,6 +193,7 @@ Game.prototype.update = function() {
 Game.prototype.draw = function() {
   this.ctx.clearRect(0, 0, this.width, this.height)
   this.ctx.drawImage(this.bgImage, 0, 0)
+  this.stars.forEach(s => s.draw())
   this.lasers.forEach(l => l.draw())
   this.comets.forEach(c => c.draw())
   this.ship.draw()
