@@ -38,7 +38,7 @@ export const injectFontFace = (fontName, fontUrl) => {
   document.head.appendChild(newStyle)
 }
 
-export const printScore = (num, len) => {
+export const numberToScore = (num, len) => {
   let output = num + ''
   while (output.length < len) {
     output = '0' + output
@@ -49,6 +49,6 @@ export const printScore = (num, len) => {
 
 export default {
   setupLoop,
-  printScore,
+  numberToScore,
   injectFontFace
 }
