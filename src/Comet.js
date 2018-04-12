@@ -4,16 +4,16 @@ import cometImage3 from './sprites/comet3.svg'
 import cometImage5 from './sprites/comet5.svg'
 import cometImage7 from './sprites/comet7.svg'
 
-import shipExplosionImage1 from './sprites/ship_explosion1.svg'
-import shipExplosionImage2 from './sprites/ship_explosion2.svg'
-import shipExplosionImage3 from './sprites/ship_explosion3.svg'
-import shipExplosionImage4 from './sprites/ship_explosion4.svg'
+import cometExplosionImage1 from './sprites/comet_explosion1.svg'
+import cometExplosionImage2 from './sprites/comet_explosion2.svg'
+import cometExplosionImage3 from './sprites/comet_explosion3.svg'
+import cometExplosionImage4 from './sprites/comet_explosion4.svg'
 
 const EXPLOSION_ANIMATION = [
-  shipExplosionImage4,
-  shipExplosionImage3,
-  shipExplosionImage2,
-  shipExplosionImage1
+  cometExplosionImage4,
+  cometExplosionImage3,
+  cometExplosionImage2,
+  cometExplosionImage1
 ]
 
 const COMET_TYPE = [
@@ -61,6 +61,10 @@ function Comet(config) {
   this.playboard = config.playboard
   this.ctx = config.ctx
   this.explosionTime = 800
+  this.explosionSize = {
+    height: 65,
+    width: 79
+  }
 
   this.moveRatio = COMET_TYPE[this.type].moveRatio
   this.size = {
@@ -110,8 +114,8 @@ Comet.prototype.draw = function() {
         image,
         this.coords.x - this.size.width / 2,
         this.coords.y - this.size.height / 2,
-        this.size.width,
-        this.size.height
+        this.explosionSize.width,
+        this.explosionSize.height
       )
     }
   } else {
