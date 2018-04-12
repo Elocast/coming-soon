@@ -1,6 +1,8 @@
 import cometImage1 from './sprites/comet1.svg'
 import cometImage2 from './sprites/comet2.svg'
 import cometImage3 from './sprites/comet3.svg'
+import cometImage5 from './sprites/comet5.svg'
+import cometImage7 from './sprites/comet7.svg'
 
 import shipExplosionImage1 from './sprites/ship_explosion1.svg'
 import shipExplosionImage2 from './sprites/ship_explosion2.svg'
@@ -25,7 +27,7 @@ const COMET_TYPE = [
   {
     height: 59,
     width: 59,
-    moveRatio: 4,
+    moveRatio: 9,
     points: 50,
     src: cometImage2
   },
@@ -35,11 +37,25 @@ const COMET_TYPE = [
     moveRatio: 8,
     points: 100,
     src: cometImage3
+  },
+  {
+    height: 104,
+    width: 83,
+    moveRatio: 8,
+    points: 100,
+    src: cometImage5
+  },
+  {
+    height: 70,
+    width: 68,
+    moveRatio: 6,
+    points: 100,
+    src: cometImage7
   }
 ]
 
 function Comet(config) {
-  this.type = COMET_TYPE[config.type] ? config.type : Math.floor((Math.random() * 3))
+  this.type = COMET_TYPE[config.type] ? config.type : Math.floor((Math.random() * COMET_TYPE.length))
 
   this.coords = config.coords
   this.playboard = config.playboard
@@ -65,7 +81,7 @@ Comet.prototype.collide = function() {
 Comet.prototype.moveY = function() {
   if (!this.exploded) {
     let pos = this.coords.y + this.moveRatio
-  
+
     this.coords = {
       ...this.coords,
       y: pos
@@ -98,7 +114,6 @@ Comet.prototype.draw = function() {
         this.size.height
       )
     }
-
   } else {
     this.ctx.drawImage(
       this.image,
