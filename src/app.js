@@ -6,8 +6,34 @@ import elocastRetroFont from './fonts/elocast_retro.ttf'
 setupLoop()
 injectFontFace('EloCastRETRO', elocastRetroFont)
 
+let canvas = null
+
+function onResize() {
+  if (!canvas) {
+    return onResize()
+  }
+
+  const body = document.querySelector('body')
+  const bodyWidth = body.clientWidth
+
+  let width = canvas.width
+  let height = canvas.height
+
+  if (bodyWidth < canvas.width) {
+    const ratio = canvas.height / canvas.width
+    height = bodyWidth * ratio
+    width = bodyWidth
+  }
+
+  canvas.style.width = `${width}px`
+  canvas.style.height = `${height}px`
+}
+
+window.addEventListener('load', onResize, false)
+window.addEventListener('resize', onResize, false)
+
 document.addEventListener('DOMContentLoaded', function() {
-  const canvas = document.querySelector('canvas')
+  canvas = document.querySelector('canvas')
   const game = new Game(canvas)
 
   const mainLoop = (function() {
