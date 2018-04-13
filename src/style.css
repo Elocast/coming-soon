@@ -1,0 +1,99 @@
+html {
+  padding: 0;
+  margin: 0
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background: #2e2f43;
+  font-family: 'Montserrat', sans-serif;
+}
+
+canvas {
+  display: block;
+  margin: 0 auto;
+}
+
+canvas:focus {
+  outline: 0;
+}
+
+.logo-wrapper {
+  padding: 20px 0;
+}
+
+.logo-wrapper > .logo {
+  margin: 0 auto;
+  background: url('./assets/logo.svg') no-repeat;
+  width: 224px;
+  height: 42px;
+}
+
+.control-wrapper {
+  padding: 40px 0;
+  margin: 0 auto;
+}
+
+.control-item {
+  padding: 20px 0;  
+  font-family: 'EloCastRETRO';
+  color: white;
+  display: block;
+  text-align: center;
+}
+
+.control-item > .control-key {
+  color: #24b0b7;
+}
+
+footer {
+  background: #28293b;
+}
+
+footer > .footer-content {
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+
+.footer-content > .box {
+  width: 100%;
+}
+
+.footer-content > .box .logo {
+  display: inline-block;
+  width: 51px;
+  height: 43px;
+  background: url('./assets/logo.svg') no-repeat;  
+}
+
+.footer-content > .box .company {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.footer-content > .box .company > span {
+  color: #d9d9d9;
+  font-size: 14px;
+  display: block;
+  font-weight: 300;  
+}
+
+.footer-content > .box .company > span:first-of-type {
+  font-weight: 600;
+}
+
+@media only screen and (min-width: 900px) {
+  .control-wrapper {
+    width: 572px;
+  }
+  
+  footer > .footer-content {
+    width: 900px;
+    padding: 20px 0;
+  }
+
+  .footer-content > .box {
+    width: 33.3333%;    
+  }
+}

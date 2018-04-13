@@ -1,3 +1,5 @@
+import './style.css'
+
 import Game from './Game'
 import { setupLoop, injectFontFace } from './utils'
 
