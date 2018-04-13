@@ -19,10 +19,9 @@ GameOverScreen.prototype.draw = function() {
 
   this.ctx.fillStyle = '#fff'
   this.ctx.font = '35px EloCastRETRO'
-  this.ctx.fillText(`  ELOCAST`, this.playboard.width / 2, 285)
-  this.ctx.drawImage(this.logoImage, this.playboard.width / 2, 285)
+  this.ctx.drawImage(this.logoImage, (this.playboard.width - this.logoImage.width) / 2, 245)
 
-  this.ctx.font = '22px EloCastRETRO'
+  this.ctx.font = '20px EloCastRETRO'
   this.ctx.fillText(`COMING SOON...`, this.playboard.width / 2, 345)
 }
 
