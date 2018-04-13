@@ -4,6 +4,7 @@ import Comet from './Comet'
 import Star from './Star'
 import Footer from './Footer'
 import WelcomeScreen from './WelcomeScreen'
+import GameOverScreen from './GameOverScreen'
 
 import bgImage from './sprites/bg.svg'
 
@@ -21,6 +22,7 @@ function Game(canvas) {
 
   this.ctx = canvas.getContext('2d')
 
+  this.gameOver = false
   this.started = false
   this.paused = false
   this.score = 0
@@ -76,6 +78,14 @@ function Game(canvas) {
     }
   })
 
+  this.gameOverScreen = new GameOverScreen({
+    ctx: this.ctx,
+    playboard: {
+      height: this.height,
+      width: this.width
+    }
+  })
+
   this.genRandomStars()
 
   this.canvas.addEventListener('keyup', this.keyUp.bind(this))
@@ -114,7 +124,7 @@ Game.prototype.update = function() {
   this.stars.forEach(s => s.moveY())
   this.stars = this.stars.filter(s => !(s.coords.y >= this.height))
 
-  if (!this.ship.isProtected() && this.ship.isAlive()) {
+  if (!this.gameOver && !this.ship.isProtected() && this.ship.isAlive()) {
     this.comets.forEach(c => {
       if (c.exploded) {
         return
@@ -133,8 +143,8 @@ Game.prototype.update = function() {
 
   this.comets.forEach(c => c.moveY())
   this.comets = this.comets.filter(c => !(
-    (c.coords.y >= this.height) 
-    || (c.exploded && (c.explosionTime + c.explodeStart) < (new Date().getTime()))))
+    (c.coords.y >= this.height) ||
+    (c.exploded && (c.explosionTime + c.explodeStart) < (new Date().getTime()))))
 
   this.lasers.forEach((l, lIndex) => {
     this.comets.forEach((c, cIndex) => {
@@ -164,19 +174,31 @@ Game.prototype.update = function() {
   this.lasers = this.lasers.filter(l => !(l.coords.y === 0))
 
   if (this.keys[37]) {
-    if (!this.ship.isProtected() && this.ship.isAlive() && this.started) {
+    if (!this.gameOver &&
+      !this.ship.isProtected() &&
+      this.ship.isAlive() &&
+      this.started
+    ) {
       this.ship.moveX(true)
     }
   }
 
   if (this.keys[39]) {
-    if (!this.ship.isProtected() && this.ship.isAlive() && this.started) {
+    if (!this.gameOver &&
+        !this.ship.isProtected() &&
+        this.ship.isAlive() &&
+        this.started
+    ) {
       this.ship.moveX(false)
     }
   }
 
   if (this.keys[88]) {
-    if (!this.ship.isProtected() && this.ship.isAlive() && this.started) {
+    if (!this.gameOver &&
+        !this.ship.isProtected() &&
+        this.ship.isAlive() &&
+        this.started
+    ) {
       if (this.lasers.length < 1 ||
         (new Date()).getTime() - this.lasers.slice().pop().createdAt >= 200
       ) {
@@ -212,7 +234,7 @@ Game.prototype.update = function() {
     }))
   }
 
-  if (this.ship.isAlive() && this.started) {
+  if (!this.gameOver && this.ship.isAlive() && this.started) {
     if (this.comets.length < 5 && !Math.round(Math.random())) {
       const nConfig = {
         coords: {
@@ -250,6 +272,11 @@ Game.prototype.update = function() {
     scoreMultiplier: this.scoreMultiplier,
     health: this.ship.health
   })
+
+  if (!this.ship.isAlive()) {
+    this.gameOver = true
+    this.ship.restoreHealth()
+  }
 }
 
 Game.prototype.draw = function() {
@@ -260,8 +287,13 @@ Game.prototype.draw = function() {
   this.comets.forEach(c => c.draw())
   this.ship.draw()
   this.footer.draw()
+
   if (!this.started) {
     this.welcomeScreen.draw()
+  }
+
+  if (this.started && this.gameOver) {
+    this.gameOverScreen.draw()
   }
 }
 

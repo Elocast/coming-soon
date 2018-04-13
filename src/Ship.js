@@ -28,6 +28,10 @@ function Ship(config) {
   this.image.src = shipImage
 }
 
+Ship.prototype.restoreHealth = function() {
+  this.health = 3
+}
+
 Ship.prototype.collide = function() {
   if (!this.isProtected()) {
     this.health--
