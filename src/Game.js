@@ -1,3 +1,5 @@
+import MobileDetect from 'mobile-detect'
+
 import Ship from './Ship'
 import Laser from './Laser'
 import Comet from './Comet'
@@ -5,8 +7,11 @@ import Star from './Star'
 import Footer from './Footer'
 import WelcomeScreen from './WelcomeScreen'
 import GameOverScreen from './GameOverScreen'
+import TouchControls from './TouchControls'
 
 import bgImage from './sprites/bg.svg'
+
+const md = new MobileDetect(window.navigator.userAgent)
 
 function Game(canvas) {
   if (!canvas.getContext) {
@@ -16,6 +21,8 @@ function Game(canvas) {
   this.canvas = canvas
   this.canvas.tabIndex = 1000
   this.canvas.focus()
+
+  this.scaleRatio = 1
 
   this.height = this.canvas.height = 547
   this.width = this.canvas.width = 572
@@ -86,10 +93,24 @@ function Game(canvas) {
     }
   })
 
+  if ((md.mobile())) {
+    this.touchControls = new TouchControls({
+      ctx: this.ctx,
+      onKeyTouch: this.setActiveKeys.bind(this),
+      scaleRatio: this.scaleRatio,
+      playboard: {
+        height: this.height,
+        width: this.width
+      }
+    })
+  }
+
   this.genRandomStars()
 
   this.canvas.addEventListener('keyup', this.keyUp.bind(this))
   this.canvas.addEventListener('keydown', this.keyDown.bind(this))
+  this.canvas.addEventListener('touchstart', this.touchHandler.bind(this))
+  this.canvas.addEventListener('touchend', this.touchHandler.bind(this))
 }
 
 Game.prototype.keyUp = function(e) {
@@ -98,6 +119,25 @@ Game.prototype.keyUp = function(e) {
 
 Game.prototype.keyDown = function(e) {
   this.keys[e.keyCode] = true
+}
+
+Game.prototype.touchHandler = function(e) {
+  if ((md.mobile())) {
+    this.touchControls.onTouch(e)
+  }
+}
+
+Game.prototype.setActiveKeys = function(keys) {
+  this.keys = keys
+}
+
+Game.prototype.setScaleRatio = function(scaleRatio) {
+  this.scaleRatio = scaleRatio
+  if ((md.mobile()) && this.touchControls) {
+    this.touchControls.update({
+      scaleRatio: this.scaleRatio
+    })
+  }
 }
 
 Game.prototype.genRandomStars = function() {
@@ -294,6 +334,10 @@ Game.prototype.draw = function() {
 
   if (this.started && this.gameOver) {
     this.gameOverScreen.draw()
+  }
+
+  if ((md.mobile())) {
+    this.touchControls.draw()
   }
 }
 

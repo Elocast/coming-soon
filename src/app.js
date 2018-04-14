@@ -8,6 +8,7 @@ import elocastRetroFont from './fonts/elocast_retro.ttf'
 setupLoop()
 injectFontFace('EloCastRETRO', elocastRetroFont)
 
+let game = null
 let canvas = null
 
 function onResize() {
@@ -27,6 +28,7 @@ function onResize() {
     width = bodyWidth
   }
 
+  game.setScaleRatio(canvas.width / width)
   canvas.style.width = `${width}px`
   canvas.style.height = `${height}px`
 }
@@ -36,7 +38,7 @@ window.addEventListener('resize', onResize, false)
 
 document.addEventListener('DOMContentLoaded', function() {
   canvas = document.querySelector('canvas')
-  const game = new Game(canvas)
+  game = new Game(canvas)
 
   const mainLoop = (function() {
     const skipTicks = 1000 / game.fps
