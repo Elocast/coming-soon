@@ -44,6 +44,8 @@
   },
   "dependencies": {
     "css-loader": "^0.28.11",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
     "mobile-detect": "^1.4.1"
   }
 }
