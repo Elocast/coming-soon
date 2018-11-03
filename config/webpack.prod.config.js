@@ -6,7 +6,8 @@ module.exports = {
   mode: 'production',
   output: {
     filename: 'build.js',
-    path: path.resolve(__dirname, '..', 'dist')
+    path: path.resolve(__dirname, '..', 'dist'),
+    publicPath: 'https://elo-front-nyc1-01.nyc3.cdn.digitaloceanspaces.com'
   },
 
   module: {
