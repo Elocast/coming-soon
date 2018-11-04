@@ -30,6 +30,14 @@ canvas:focus {
   height: 42px;
 }
 
+.logo-wrapper > .plogo {
+  margin: 0 auto;
+  background: url('./assets/polethedev_logo_nobg.svg') no-repeat;
+  background-size: contain;
+  width: 224px;
+  height: 42px;
+}
+
 .control-wrapper {
   padding: 40px 0;
   margin: 0 auto;
@@ -52,12 +60,31 @@ footer {
 }
 
 footer > .footer-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 20px 10px;
   margin: 0 auto;
 }
 
 .footer-content > .box {
   width: 100%;
+  order: 1;
+}
+
+.footer-content > .box.developer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 10px;
+  order: 0;
+}
+
+.footer-content > .developer > .title {
+  color: #d9d9d9;
+  font-size: 14px;
+  display: block;
+  font-weight: 300;  
 }
 
 .footer-content > .box .logo {
@@ -65,6 +92,14 @@ footer > .footer-content {
   width: 51px;
   height: 43px;
   background: url('./assets/logo.svg') no-repeat;  
+}
+
+.footer-content > .box .plogo {
+  display: inline-block;
+  width: 150px;
+  height: 40px;
+  background: url('./assets/polethedev_logo_nobg.svg') center no-repeat;
+  background-size: contain;
 }
 
 .footer-content > .box .company {
@@ -91,9 +126,17 @@ footer > .footer-content {
   footer > .footer-content {
     width: 900px;
     padding: 20px 0;
+    flex-direction: row;
+  }
+
+  .footer-content > .box.developer {
+    margin: 0;
+    order: 1;
   }
 
   .footer-content > .box {
-    width: 33.3333%;    
+    flex-basis: 33.3333%;
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 }
