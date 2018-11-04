@@ -7,7 +7,7 @@ module.exports = {
   output: {
     filename: 'build.js',
     path: path.resolve(__dirname, '..', 'dist'),
-    publicPath: 'https://elo-front-nyc1-01.nyc3.cdn.digitaloceanspaces.com'
+    publicPath: 'https://elo-front-nyc1-01.nyc3.cdn.digitaloceanspaces.com/'
   },
 
   module: {
